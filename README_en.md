@@ -2,10 +2,10 @@
 
 [简体中文](./README.md) | [English](./README_en.md)
 
-[![GitHub stars](https://img.shields.io/github/stars/toki-plus/yanqu-highlight-clip?style=social)](https://github.com/toki-plus/yanqu-highlight-clip/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/toki-plus/yanqu-highlight-clip?style=social)](https://github.com/toki-plus/yanqu-highlight-clip/network/members)
+[![GitHub stars](https://img.shields.io/github/stars/toki-plus/ai-highlight-clip?style=social)](https://github.com/toki-plus/ai-highlight-clip/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/toki-plus/ai-highlight-clip?style=social)](https://github.com/toki-plus/ai-highlight-clip/network/members)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/toki-plus/yanqu-highlight-clip/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/toki-plus/ai-highlight-clip/pulls)
 
 **`AI Highlight Clip` is a free, open-source desktop application that automatically discovers and clips multiple short videos with viral potential—the "highlight moments"—from long-form content like interviews, courses, and livestreams.**
 
@@ -68,8 +68,8 @@ This isn't just a clipping tool; it's a complete AI content re-creation pipeline
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/toki-plus/yanqu-highlight-clip.git
-    cd yanqu-highlight-clip
+    git clone https://github.com/toki-plus/ai-highlight-clip.git
+    cd ai-highlight-clip
     ```
 
 2.  **Create and activate a virtual environment (recommended):**
@@ -93,7 +93,7 @@ This isn't just a clipping tool; it's a complete AI content re-creation pipeline
 
 5.  **Run the application:**
     ```bash
-    python yanqu_highlight_clip.py
+    python ai_highlight_clip.py
     ```
 
 ## 📖 Usage Guide
@@ -153,8 +153,8 @@ This isn't just a clipping tool; it's a complete AI content re-creation pipeline
 ## 🤝 Contributing
 
 Contributions of any kind are welcome! If you have ideas for new features, found a bug, or have any suggestions for improvement, please:
--   Submit an [Issue](https://github.com/toki-plus/yanqu-highlight-clip/issues) to start a discussion.
--   Fork this repository and submit a [Pull Request](https://github.com/toki-plus/yanqu-highlight-clip/pulls).
+-   Submit an [Issue](https://github.com/toki-plus/ai-highlight-clip/issues) to start a discussion.
+-   Fork this repository and submit a [Pull Request](https://github.com/toki-plus/ai-highlight-clip/pulls).
 
 If this project has been helpful to you, please consider giving it a ⭐!
 
