@@ -2,10 +2,10 @@
 
 [简体中文](./README.md) | [English](./README_en.md)
 
-[![GitHub stars](https://img.shields.io/github/stars/toki-plus/yanqu-highlight-clip?style=social)](https://github.com/toki-plus/yanqu-highlight-clip/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/toki-plus/yanqu-highlight-clip?style=social)](https://github.com/toki-plus/yanqu-highlight-clip/network/members)
+[![GitHub stars](https://img.shields.io/github/stars/toki-plus/ai-highlight-clip?style=social)](https://github.com/toki-plus/ai-highlight-clip/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/toki-plus/ai-highlight-clip?style=social)](https://github.com/toki-plus/ai-highlight-clip/network/members)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/toki-plus/yanqu-highlight-clip/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/toki-plus/ai-highlight-clip/pulls)
 
 **`AI Highlight Clip` 是一款免费、开源的桌面应用程序，它能全自动地从长视频（如访谈、课程、直播回放）中，智能发现并剪辑出多个具有爆款潜质的“高光时刻”短视频。**
 
@@ -68,8 +68,8 @@
 
 1.  **克隆本仓库：**
     ```bash
-    git clone https://github.com/toki-plus/yanqu-highlight-clip.git
-    cd yanqu-highlight-clip
+    git clone https://github.com/toki-plus/ai-highlight-clip.git
+    cd ai-highlight-clip
     ```
 
 2.  **创建并激活虚拟环境 (推荐)：**
@@ -93,7 +93,7 @@
 
 5.  **运行程序：**
     ```bash
-    python yanqu_highlight_clip.py
+    python ai_highlight_clip.py
     ```
 
 ## 📖 使用指南
@@ -153,8 +153,8 @@
 ## 🤝 参与贡献
 
 欢迎任何形式的贡献！如果你有新的功能点子、发现了Bug，或者有任何改进建议，请：
--   提交一个 [Issue](https://github.com/toki-plus/yanqu-highlight-clip/issues) 进行讨论。
--   Fork 本仓库并提交 [Pull Request](https://github.com/toki-plus/yanqu-highlight-clip/pulls)。
+-   提交一个 [Issue](https://github.com/toki-plus/ai-highlight-clip/issues) 进行讨论。
+-   Fork 本仓库并提交 [Pull Request](https://github.com/toki-plus/ai-highlight-clip/pulls)。
 
 如果这个项目对你有帮助，请不吝点亮一颗 ⭐！
 
