@@ -146,6 +146,7 @@ This isn't just a clipping tool; it's a complete AI content re-creation pipeline
 
 ## 📂 My Other Open Source Projects
 
+-   **[AI Mixed Cut](https://github.com/toki-plus/ai-mixed-cut)**: A groundbreaking AI content re-creation engine that deconstructs viral videos into a creative library and automatically generates new, original videos using a "Deconstruct-Reconstruct" model.
 -   **[AI Video Workflow](https://github.com/toki-plus/ai-video-workflow)**: A fully automated AI-native video generation pipeline, integrating Text-to-Image, Image-to-Video, and Text-to-Music models to create AIGC short videos with one click.
 -   **[AI TTV Workflow](https://github.com/toki-plus/ai-ttv-workflow)**: An AI-powered Text-to-Video tool that automatically converts any script into a short video with voiceover, subtitles, and a cover image, supporting AI-driven script extraction, re-creation, and translation.
 -   **[Video Mover](https://github.com/toki-plus/video-mover)**: A powerful, fully automated content creation pipeline. It monitors specified creators, downloads their new videos, performs deep, multi-dimensional deduplication, generates viral titles with an LLM, and auto-publishes to various platforms.
