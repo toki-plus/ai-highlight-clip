@@ -1,0 +1,5 @@
+dashscope
+ffmpeg-python
+openai-whisper
+pydantic
+PyQt5
