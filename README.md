@@ -50,7 +50,7 @@
 <p align="center">
   <img src="./images/cover_demo.png" alt="软件主界面" width="800"/>
   <br>
-  <em>一键剪辑《繁花》电视剧全集高光片段。</em>
+  <em>一键将 30 集 4K 电视剧《繁花》（44GB） 剪辑成 30 个金融相关的高光片段🎬</em>
 </p>
 
 ## 🚀 快速开始
