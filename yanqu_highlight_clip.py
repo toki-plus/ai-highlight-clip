@@ -4,6 +4,7 @@ import sys
 import time
 import json
 import pysrt
+import shutil
 import ffmpeg
 import random
 import pickle
@@ -25,7 +26,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
                              QPushButton, QFileDialog, QLineEdit, QGroupBox,
                              QFormLayout, QSpinBox, QTextEdit, QComboBox,
                              QProgressBar, QMessageBox, QCheckBox, QLabel,
-                             QDialog, QDialogButtonBox)
+                             QSpacerItem, QSizePolicy, QDialog, QDialogButtonBox)
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, QUrl, Qt
 from PyQt5.QtGui import QDesktopServices, QIcon
 import dashscope
@@ -38,7 +39,7 @@ except ImportError:
 
 class Config:
     APP_NAME = "颜趣AI高光剪辑工具"
-    APP_VERSION = "1.6.0"
+    APP_VERSION = "1.7.0"
 
 STYLESHEET = """
 QWidget { background-color: #1A1D2A; color: #D0D0D0; font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif; font-size: 10pt; }
@@ -644,12 +645,15 @@ class AIPipeline:
                     if response and (titles_data := self.llm.parse_json_response(response)) and isinstance(titles_data, dict):
                         for clip_id, title_info in titles_data.items():
                             if clip_id in clips_by_id and isinstance(title_info, dict):
-                                clips_by_id[clip_id].generated_title = title_info.get("title", "未生成标题")
+                                generated_title = title_info.get("title", "")
+                                clips_by_id[clip_id].generated_title = generated_title
                                 clips_by_id[clip_id].generated_cover_title = title_info.get("cover_title", "")
                                 clips_by_id[clip_id].generated_cover_subtitle = title_info.get("cover_subtitle", "")
+                                if not generated_title or not generated_title.strip():
+                                    logger.warning(f"片段ID {clip_id} 从AI获得了空标题。片段内容预览: '{''.join(clips_by_id[clip_id].content)[:50]}...'")
                         logger.info(f"批次 {batch_index + 1}/{total_batches} 标题生成成功。")
                     else:
-                        logger.warning(f"无法解析或API调用失败，批次 {batch_index + 1} 的标题响应。")
+                        logger.warning(f"无法解析或API调用失败，批次 {batch_index + 1} 的标题响应。响应预览: {str(response)[:200]}...")
                 except Exception as exc:
                     logger.error(f"处理标题生成批次 {batch_index + 1} 时发生异常: {exc}")
                 finally:
@@ -783,6 +787,7 @@ def run_processing_task(queue, params):
         max_chars_per_line = params.get('max_chars_per_line', 10)
         convert_landscape = params.get('convert_landscape_to_portrait', True)
         for i, clip in enumerate(final_clips):
+            logger.info(f"准备剪辑片段 {i+1}/{len(final_clips)}: [ID: {clip.id}, Score: {clip.final_score:.2f}, Title: '{clip.generated_title}']")
             coarse_start_s = Processor.time_to_seconds(clip.start_time)
             coarse_end_s = Processor.time_to_seconds(clip.end_time)
             clip_subtitle_path = None
@@ -1122,7 +1127,7 @@ class MainWindow(QMainWindow):
         self.clip_duration_spinbox.valueChanged.connect(self.update_recommendation_text)
         self.max_tasks_spinbox = QSpinBox()
         self.max_tasks_spinbox.setRange(1, 20)
-        self.max_tasks_spinbox.setValue(10)
+        self.max_tasks_spinbox.setValue(5)
         self.power_words_edit = QLineEdit()
         self.power_words_edit.setPlaceholderText("多个词用逗号或空格隔开，留空则不使用关键词排序")
         default_keywords = "财报,利润,估值,风险,策略,逻辑,内幕,股价,市场,投资,交易,主力,资本,杠杆,预期,博弈"
@@ -1176,12 +1181,17 @@ class MainWindow(QMainWindow):
         self.stop_button.setFixedHeight(45)
         self.stop_button.setEnabled(False)
         self.stop_button.clicked.connect(self.stop_processing)
-        self.open_dir_button = QPushButton("📂 打开片段目录")
+        self.open_dir_button = QPushButton("📂 打开目录")
         self.open_dir_button.setFixedHeight(45)
         self.open_dir_button.clicked.connect(self.open_output_directory)
+        self.clear_cache_button = QPushButton("🧹 清理缓存")
+        self.clear_cache_button.setFixedHeight(45)
+        self.clear_cache_button.setToolTip("删除AI分析缓存和临时文件，解决部分生成异常问题。")
+        self.clear_cache_button.clicked.connect(self.clear_cache)
         action_button_layout.addWidget(self.start_button)
         action_button_layout.addWidget(self.stop_button)
         action_button_layout.addWidget(self.open_dir_button)
+        action_button_layout.addWidget(self.clear_cache_button)
         bottom_controls_layout.addLayout(action_button_layout)
         self.progress_bar = QProgressBar()
         self.progress_bar.setValue(0)
@@ -1417,7 +1427,7 @@ class MainWindow(QMainWindow):
         self.api_key_edit.setText(self.config.get('api', 'api_key', fallback=''))
         self.num_clips_spinbox.setValue(self.config.getint('settings', 'num_clips', fallback=10))
         self.clip_duration_spinbox.setValue(self.config.getint('settings', 'clip_duration', fallback=30))
-        self.max_tasks_spinbox.setValue(self.config.getint('settings', 'max_concurrent_tasks', fallback=10))
+        self.max_tasks_spinbox.setValue(self.config.getint('settings', 'max_concurrent_tasks', fallback=5))
         self.subtitle_lines_spinbox.setValue(self.config.getint('settings', 'subtitle_lines', fallback=2))
         self.max_chars_per_line_spinbox.setValue(self.config.getint('settings', 'max_chars_per_line', fallback=10))
         last_lang = self.config.get('settings', 'language', fallback='中文')
@@ -1586,7 +1596,7 @@ class MainWindow(QMainWindow):
             self.landscape_to_portrait_checkbox.setEnabled(False)
         for widget in [self.browse_button, self.api_key_edit, self.num_clips_spinbox,
                        self.clip_duration_spinbox, self.max_tasks_spinbox, self.start_button,
-                       self.open_dir_button, self.language_combo, self.power_words_edit,
+                       self.open_dir_button, self.clear_cache_button, self.language_combo, self.power_words_edit,
                        self.burn_subtitle_checkbox, self.precise_subtitle_checkbox,
                        self.add_bgm_checkbox, self.gpu_accel_checkbox,
                        self.whisper_model_combo, self.subtitle_lines_spinbox, self.max_chars_per_line_spinbox,
@@ -1674,6 +1684,42 @@ class MainWindow(QMainWindow):
             logger.info(f"输出目录 '{self.output_dir_name}' 不存在，已自动创建。")
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(output_path.resolve())))
         logger.info(f"正在打开目录: {output_path.resolve()}")
+
+    def clear_cache(self):
+        reply = QMessageBox.question(self, '确认清理缓存',
+                                     "此操作将删除所有已生成的AI分析缓存和临时文件，但不会删除最终输出的视频片段。\n\n"
+                                     "您确定要继续吗？",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            logger.info("用户请求清理缓存...")
+            cache_dir = Path.cwd() / "cache"
+            temp_dir = Path(self.output_dir_name) / "temp"
+            deleted_paths = []
+            not_found_paths = []
+            error_messages = []
+            for path_to_delete, name in [(cache_dir, "AI分析缓存"), (temp_dir, "临时文件")]:
+                if path_to_delete.exists():
+                    try:
+                        shutil.rmtree(path_to_delete)
+                        deleted_paths.append(name)
+                        logger.info(f"✅ 成功删除目录: {path_to_delete}")
+                    except Exception as e:
+                        error_message = f"删除 {name} 目录 ({path_to_delete}) 失败: {e}"
+                        error_messages.append(error_message)
+                        logger.error(error_message)
+                else:
+                    not_found_paths.append(name)
+                    logger.info(f"目录不存在，无需清理: {path_to_delete}")
+            summary = ""
+            if deleted_paths:
+                summary += f"已成功清理: {', '.join(deleted_paths)}。\n"
+            if not_found_paths:
+                summary += f"无需清理（目录不存在）: {', '.join(not_found_paths)}。\n"
+            if error_messages:
+                 summary += f"\n发生错误:\n" + "\n".join(error_messages)
+            if not summary:
+                 summary = "没有找到任何需要清理的缓存目录。"
+            QMessageBox.information(self, "清理完成", summary)
 
     def append_log(self, text):
         self.log_output.append(text)
