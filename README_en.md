@@ -132,7 +132,7 @@ This isn't just a clipping tool; it's a complete AI content re-creation pipeline
       <br />
       <sub><b>Personal WeChat</b></sub>
       <br />
-      <sub>ID: toki-plus (Please note "GitHub Customization")</sub>
+      <sub>ID: toki-plus</sub>
     </td>
     <td align="center">
       <img src="./images/gzh.png" alt="Official Account QR Code" width="200"/>
